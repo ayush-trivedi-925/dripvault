@@ -17,10 +17,8 @@ import CheckAuth from "./components/Common/AuthCheck";
 import Unauthorized from "./Pages/Unauthorized/Unauthorized";
 
 function App() {
-  const isAuthenticated = true;
-  const user = {
-    name: "Ayush",
-  };
+  const isAuthenticated = false;
+  const user = null;
 
   return (
     <div className="flex flex-col overflow-hidden bg-white ">
@@ -53,7 +51,7 @@ function App() {
           path="/shop"
           element={
             <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <AdminLayout />
+              <ShoppingLayout />
             </CheckAuth>
           }
         >
