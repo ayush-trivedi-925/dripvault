@@ -3,12 +3,11 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
+require("dotenv").config();
 
 // Database connection
 mongoose
-  .connect(
-    "mongodb+srv://Ayush123:ayush123@dripvault.fjlip.mongodb.net/dripvault?retryWrites=true&w=majority&appName=DripVault"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connection established with MongoDB"))
   .catch((error) => console.log("Connection error", error));
 
