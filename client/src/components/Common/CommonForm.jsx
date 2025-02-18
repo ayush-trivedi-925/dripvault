@@ -84,7 +84,7 @@ export default function CommonForm({
         break;
       default:
         element = (
-          <input
+          <Input
             type={controlItem.type}
             name={controlItem.name}
             placeholder={controlItem.placeholder}
