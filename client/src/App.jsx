@@ -15,6 +15,7 @@ import ShoppingCheckout from "./Pages/Shopping-View/ShoppingCheckout";
 import ShoppingAccount from "./Pages/Shopping-View/ShoppingAccount";
 import CheckAuth from "./components/Common/AuthCheck";
 import Unauthorized from "./Pages/Unauthorized/Unauthorized";
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   const isAuthenticated = false;
@@ -63,6 +64,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
+      <Toaster />
     </div>
   );
 }
