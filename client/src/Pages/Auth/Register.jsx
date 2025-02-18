@@ -27,6 +27,12 @@ export default function Register() {
           title: data?.payload.message || "Registration successful!",
         });
         navigate("/auth/login");
+      } else {
+        toast({
+          title: data?.payload.message || "Registration unsuccessful!",
+          variant: "destructive",
+        });
+        navigate("/auth/register");
       }
     });
   };
