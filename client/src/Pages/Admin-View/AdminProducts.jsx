@@ -32,6 +32,9 @@ export default function AdminProducts() {
 
   // State to get url of last uploaded image
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+
+  // State for setting loading while image is getting uploaded
+  const [imageLoading, setImageLoading] = useState(false);
   return (
     <>
       <div className="mb-5 w-full flex justify-end">
@@ -53,6 +56,8 @@ export default function AdminProducts() {
               setImageFile={setImageFile}
               uploadedImageUrl={uploadedImageUrl}
               setUploadedImageUrl={setUploadedImageUrl}
+              imageLoading={imageLoading}
+              setImageLoading={setImageLoading}
             />
             <div className="py-6">
               <CommonForm

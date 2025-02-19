@@ -7,6 +7,7 @@ require("dotenv").config();
 
 // Routers
 const authRouter = require("./routes/Auth/AuthRoutes.js");
+const adminProductsRouter = require("./routes/Admin/productsRoutes.js");
 
 // Database connection
 mongoose
@@ -36,6 +37,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/admin/products", adminProductsRouter);
 
 app.listen(port, () => {
   console.log(`Listening on Port: ${port}`);
