@@ -10,6 +10,7 @@ import {
 import { addProductFormElements } from "@/config";
 import {
   addNewProduct,
+  deleteProduct,
   editProduct,
   fetchAllProducts,
 } from "@/store/admin/products-slice";
@@ -86,6 +87,25 @@ export default function AdminProducts() {
         });
   }
 
+  function isFormValid() {
+    return Object.keys(formData)
+      .map((key) => formData[key] !== "")
+      .every((item) => item);
+  }
+
+  function handleDelete(getCurrentId) {
+    dispatch(
+      deleteProduct({
+        id: getCurrentId,
+      })
+    ).then((data) => {
+      console.log(data);
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts());
+      }
+    });
+  }
+
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
@@ -107,6 +127,7 @@ export default function AdminProducts() {
                   setFormData={setFormData}
                   key={productItemIdx}
                   product={productItem}
+                  handleDelete={handleDelete}
                 />
               );
             })
@@ -144,6 +165,7 @@ export default function AdminProducts() {
               buttonText={currentEditId ? "Edit" : "Add"}
               formControls={addProductFormElements}
               onSubmit={onSubmit}
+              isBtnDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>
