@@ -32,7 +32,7 @@ const addProduct = async (req, res) => {
       price,
       salePrice,
       totalStock,
-    } = req.body();
+    } = req.body;
     const newProduct = new Product({
       image,
       title,

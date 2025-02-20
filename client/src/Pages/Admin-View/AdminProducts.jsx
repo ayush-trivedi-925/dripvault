@@ -8,7 +8,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
-import { useState } from "react";
+import { addNewProduct, fetchAllProducts } from "@/store/admin/products-slice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
 
 const initialFormData = {
   image: null,
@@ -20,10 +23,6 @@ const initialFormData = {
   salePrice: "",
   totalStock: "",
 };
-
-function onSubmit(event) {
-  event.preventDefault();
-}
 
 export default function AdminProducts() {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
@@ -37,6 +36,35 @@ export default function AdminProducts() {
 
   // State for setting loading while image is getting uploaded
   const [imageLoading, setImageLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const { productList } = useSelector((state) => state.adminProducts);
+  const { toast } = useToast();
+
+  function onSubmit(event) {
+    event.preventDefault();
+    dispatch(
+      addNewProduct({
+        ...formData,
+        image: uploadedImageUrl,
+      })
+    ).then((data) => {
+      console.log(data);
+      if (data?.payload?.success) {
+        setImageFile(null);
+        setFormData(initialFormData);
+        setOpenCreateProductsDialog(false);
+        dispatch(fetchAllProducts());
+        toast({
+          title: "Product added successfully",
+        });
+      }
+    });
+  }
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
   return (
     <>
       <div className="mb-5 w-full flex justify-end">
