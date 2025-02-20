@@ -21,7 +21,9 @@ const initialFormData = {
   totalStock: "",
 };
 
-function onSubmit() {}
+function onSubmit(event) {
+  event.preventDefault();
+}
 
 export default function AdminProducts() {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
