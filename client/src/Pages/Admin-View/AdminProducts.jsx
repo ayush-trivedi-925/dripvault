@@ -12,6 +12,7 @@ import { addNewProduct, fetchAllProducts } from "@/store/admin/products-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
+import AdminProductTile from "./AdminProductTIle";
 
 const initialFormData = {
   image: null,
@@ -73,34 +74,42 @@ export default function AdminProducts() {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        <Sheet
-          open={openCreateProductsDialog}
-          onOpenChange={() => setOpenCreateProductsDialog(false)}
-        >
-          <SheetContent side="right" className="overflow-auto">
-            <SheetHeader>
-              <SheetTitle>Add New Product</SheetTitle>
-            </SheetHeader>
-            <ProductImageUpload
-              imageFile={imageFile}
-              setImageFile={setImageFile}
-              uploadedImageUrl={uploadedImageUrl}
-              setUploadedImageUrl={setUploadedImageUrl}
-              imageLoading={imageLoading}
-              setImageLoading={setImageLoading}
-            />
-            <div className="py-6">
-              <CommonForm
-                formData={formData}
-                setFormData={setFormData}
-                buttonText="Add Product"
-                formControls={addProductFormElements}
-                onSubmit={onSubmit}
-              />
-            </div>
-          </SheetContent>
-        </Sheet>
+        {productList && productList.length > 0
+          ? productList.map((productItem, productItemIdx) => {
+              console.log(productItem);
+              return (
+                <AdminProductTile key={productItemIdx} product={productItem} />
+              );
+            })
+          : null}
       </div>
+      <Sheet
+        open={openCreateProductsDialog}
+        onOpenChange={() => setOpenCreateProductsDialog(false)}
+      >
+        <SheetContent side="right" className="overflow-auto">
+          <SheetHeader>
+            <SheetTitle>Add New Product</SheetTitle>
+          </SheetHeader>
+          <ProductImageUpload
+            imageFile={imageFile}
+            setImageFile={setImageFile}
+            uploadedImageUrl={uploadedImageUrl}
+            setUploadedImageUrl={setUploadedImageUrl}
+            imageLoading={imageLoading}
+            setImageLoading={setImageLoading}
+          />
+          <div className="py-6">
+            <CommonForm
+              formData={formData}
+              setFormData={setFormData}
+              buttonText="Add Product"
+              formControls={addProductFormElements}
+              onSubmit={onSubmit}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
   );
 }
