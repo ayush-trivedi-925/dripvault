@@ -204,7 +204,7 @@ const deleteCartItem = async (req, res) => {
   }
 };
 
-moudule.exports = {
+module.exports = {
   addToCart,
   fetchCartItems,
   updateCartItemQuantity,
