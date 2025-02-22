@@ -75,10 +75,13 @@ export default function ShoppingListing() {
       setSearchParams(new URLSearchParams(createQueryString));
     }
   }, [filters]);
-  // Fetch list of all product
+  // Fetch list of all filtered product
   useEffect(() => {
-    dispatch(fetchAllFilteredProduct());
-  }, [dispatch]);
+    if (filters !== null && sort !== null)
+      dispatch(
+        fetchAllFilteredProduct({ filterParams: filters, sortParams: sort })
+      );
+  }, [dispatch, sort, filters]);
 
   console.log(filters, "filters");
 
