@@ -4,8 +4,26 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { toast } from "@/hooks/use-toast";
 
 export default function ProductDetailsDialog({ product, open, setOpen }) {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  //Handle AddToCart
+  function handleAddToCart(productId) {
+    dispatch(addToCart({ userId: user?.id, productId, quantity: 1 })).then(
+      (data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchCartItems(user?.id));
+          toast({
+            title: "Product added to cart",
+          });
+        }
+      }
+    );
+  }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -54,7 +72,12 @@ export default function ProductDetailsDialog({ product, open, setOpen }) {
             <span className="text-muted-foreground">(4.5)</span>
           </div>
           <div className="mt-5 mb-5">
-            <Button className="w-full">Add to Cart</Button>
+            <Button
+              className="w-full"
+              onClick={() => handleAddToCart(product?._id)}
+            >
+              Add to Cart
+            </Button>
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto">

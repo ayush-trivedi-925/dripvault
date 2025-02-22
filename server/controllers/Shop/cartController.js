@@ -54,7 +54,7 @@ const fetchCartItems = async (req, res) => {
       });
     }
     const cart = await Cart.findOne({ userId }).populate({
-      path: "items.ProductId",
+      path: "items.productId",
       select: "image title price salePrice",
     });
     if (!cart) {

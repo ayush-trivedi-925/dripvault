@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
+import { toast } from "@/hooks/use-toast";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import {
   fetchAllFilteredProduct,
   getProductById,
@@ -32,6 +34,7 @@ function createSearchParamsHelper(filterParams) {
 
 export default function ShoppingListing() {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
@@ -74,7 +77,20 @@ export default function ShoppingListing() {
   async function handleProductDetails(id) {
     await dispatch(getProductById(id));
     setOpen(true);
-    console.log(productDetails);
+  }
+
+  //Handle AddToCart
+  function handleAddToCart(productId) {
+    dispatch(addToCart({ userId: user?.id, productId, quantity: 1 })).then(
+      (data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchCartItems(user?.id));
+          toast({
+            title: "Product added to cart",
+          });
+        }
+      }
+    );
   }
 
   // Setting up filters and sort on page load
@@ -147,6 +163,7 @@ export default function ShoppingListing() {
                     key={productIdx}
                     product={product}
                     handleProductDetails={handleProductDetails}
+                    handleAddToCart={handleAddToCart}
                   />
                 );
               })
