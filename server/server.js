@@ -9,6 +9,7 @@ require("dotenv").config();
 const authRouter = require("./routes/Auth/AuthRoutes.js");
 const adminProductsRouter = require("./routes/Admin/productsRoutes.js");
 const shopProductsRouter = require("./routes/Shop/productsRoutes.js");
+const shopCartRouter = require("./routes/Shop/cartRoutes.js");
 
 // Database connection
 mongoose
@@ -40,6 +41,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
+app.use("/api/shop/cart", shopCartRouter);
 
 app.listen(port, () => {
   console.log(`Listening on Port: ${port}`);
