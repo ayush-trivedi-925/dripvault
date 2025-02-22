@@ -1,3 +1,4 @@
+import ProductDetailsDialog from "@/components/Shopping-View/ProductDetailsDialog";
 import ProductFilter from "@/components/Shopping-View/ProductFilter";
 import ShoppingProductTile from "@/components/Shopping-View/ShoppingProductTile";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { fetchAllFilteredProduct } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProduct,
+  getProductById,
+} from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,14 +32,18 @@ function createSearchParamsHelper(filterParams) {
 
 export default function ShoppingListing() {
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   // State for managing filters and sort
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Product details dialog box
+  const [open, setOpen] = useState(false);
+
   function handleSort(value) {
-    console.log(value);
     setSort(value);
   }
 
@@ -62,6 +70,13 @@ export default function ShoppingListing() {
     sessionStorage.setItem("filters", JSON.stringify(copyFilters));
   }
 
+  //
+  async function handleProductDetails(id) {
+    await dispatch(getProductById(id));
+    setOpen(true);
+    console.log(productDetails);
+  }
+
   // Setting up filters and sort on page load
   useEffect(() => {
     setSort("price-lowtohigh");
@@ -83,7 +98,11 @@ export default function ShoppingListing() {
       );
   }, [dispatch, sort, filters]);
 
-  console.log(filters, "filters");
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOpen(true);
+    }
+  }, [productDetails]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -124,12 +143,21 @@ export default function ShoppingListing() {
           {productList && productList.length > 0
             ? productList.map((product, productIdx) => {
                 return (
-                  <ShoppingProductTile key={productIdx} product={product} />
+                  <ShoppingProductTile
+                    key={productIdx}
+                    product={product}
+                    handleProductDetails={handleProductDetails}
+                  />
                 );
               })
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={open}
+        setOpen={setOpen}
+        product={productDetails}
+      />
     </div>
   );
 }

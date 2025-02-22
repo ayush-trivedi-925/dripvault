@@ -50,4 +50,28 @@ const getFilteredProducts = async (req, res) => {
   }
 };
 
-module.exports = { getFilteredProducts };
+const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const findProduct = await Product.findById(id);
+    if (!findProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product doesn't exists",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Product fetched successfully",
+      data: findProduct,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Product fetching failed",
+    });
+  }
+};
+
+module.exports = { getFilteredProducts, getProductById };

@@ -2,10 +2,10 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 
-export default function ShoppingProductTile({ product }) {
+export default function ShoppingProductTile({ product, handleProductDetails }) {
   return (
     <Card className="w-full max-w-sm mx-auto">
-      <div>
+      <div onClick={() => handleProductDetails(product._id)}>
         <div className="relative">
           <img
             src={product?.image}
