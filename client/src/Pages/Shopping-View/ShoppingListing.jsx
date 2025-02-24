@@ -74,8 +74,8 @@ export default function ShoppingListing() {
   }
 
   //
-  async function handleProductDetails(id) {
-    await dispatch(getProductById(id));
+  function handleProductDetails(id) {
+    dispatch(getProductById(id));
     setOpen(true);
   }
 
@@ -113,12 +113,6 @@ export default function ShoppingListing() {
         fetchAllFilteredProduct({ filterParams: filters, sortParams: sort })
       );
   }, [dispatch, sort, filters]);
-
-  useEffect(() => {
-    if (productDetails !== null) {
-      setOpen(true);
-    }
-  }, [productDetails]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">

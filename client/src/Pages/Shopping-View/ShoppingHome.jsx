@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.webp";
-import bannertwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
+import bannerOne from "../../assets/banner1.png";
+import bannertwo from "../../assets/banner2.jpg";
+import bannerThree from "../../assets/banner3.jpg";
+import bannerFour from "../../assets/banner4.jpg";
 
 import nikeIcon from "../../assets/brand-icons/brand_nike_icon_157863.png";
 import pumaIcon from "../../assets/brand-icons/puma.png";
@@ -22,8 +23,15 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProduct } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProduct,
+  getProductById,
+} from "@/store/shop/products-slice";
 import ShoppingProductTile from "@/components/Shopping-View/ShoppingProductTile";
+import { useNavigate } from "react-router-dom";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { toast } from "@/hooks/use-toast";
+import ProductDetailsDialog from "@/components/Shopping-View/ProductDetailsDialog";
 
 const categories = [
   {
@@ -64,9 +72,45 @@ const brands = [
 
 export default function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [bannerOne, bannertwo, bannerThree];
+  const { user } = useSelector((state) => state.auth);
+  const slides = [bannerOne, bannertwo, bannerThree, bannerFour];
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
+
+  const navigate = useNavigate();
+
+  // Product details dialog box
+  const [open, setOpen] = useState(false);
+
+  function handleNavigateToListingPage(item, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [item.id],
+    };
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate("/shop/listing");
+  }
+
+  function handleProductDetails(id) {
+    dispatch(getProductById(id));
+    setOpen(true);
+  }
+
+  //Handle AddToCart
+  function handleAddToCart(productId) {
+    dispatch(addToCart({ userId: user?.id, productId, quantity: 1 })).then(
+      (data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchCartItems(user?.id));
+          toast({
+            title: "Product added to cart",
+          });
+        }
+      }
+    );
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -85,6 +129,7 @@ export default function ShoppingHome() {
   }, [dispatch]);
 
   // console.log(productList);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[600px] overflow-hidden">
@@ -130,7 +175,12 @@ export default function ShoppingHome() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {categories.map((item) => {
               return (
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                <Card
+                  onClick={() => {
+                    handleNavigateToListingPage(item, "category");
+                  }}
+                  className="cursor-pointer hover:shadow-lg transition-shadow"
+                >
                   <CardContent className="flex flex-col items-center justify-center p-6">
                     {item.icon}
                     <span className="font-bold">{item.label}</span>
@@ -148,7 +198,12 @@ export default function ShoppingHome() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 ">
               {brands.map((item) => {
                 return (
-                  <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+                  <Card
+                    onClick={() => {
+                      handleNavigateToListingPage(item, "brand");
+                    }}
+                    className="cursor-pointer hover:shadow-lg transition-shadow"
+                  >
                     <CardContent className="flex flex-col items-center justify-center p-6">
                       <img
                         src={item.icon}
@@ -172,12 +227,23 @@ export default function ShoppingHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
               ? productList.map((product) => {
-                  return <ShoppingProductTile product={product} />;
+                  return (
+                    <ShoppingProductTile
+                      product={product}
+                      handleProductDetails={handleProductDetails}
+                      handleAddToCart={handleAddToCart}
+                    />
+                  );
                 })
               : null}
           </div>
         </div>
       </section>
+      <ProductDetailsDialog
+        open={open}
+        setOpen={setOpen}
+        product={productDetails}
+      />
     </div>
   );
 }

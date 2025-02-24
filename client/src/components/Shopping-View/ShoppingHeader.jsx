@@ -23,18 +23,29 @@ import { logoutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./UserCartWrapper";
 import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
+import { Label } from "../ui/label";
 
 function MenuItems() {
+  const navigate = useNavigate();
+
+  function handleNavigateToListingPage(item) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = item.id === "home" ? null : { category: [item.id] };
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(item.path);
+  }
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
-          className="text-sm font-medium"
+        <Label
+          className="text-sm font-medium cursor-pointer"
           key={menuItem.id}
-          to={menuItem.path}
+          onClick={() => {
+            handleNavigateToListingPage(menuItem);
+          }}
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -51,7 +62,6 @@ function HeaderRightContent() {
   // Getting cart items
   const { cartItems } = useSelector((state) => state.shopCart);
 
-  console.log(cartItems);
   useEffect(() => {
     dispatch(fetchCartItems(user?.id));
   }, [dispatch]);
