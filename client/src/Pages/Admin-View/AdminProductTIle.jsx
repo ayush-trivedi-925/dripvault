@@ -3,7 +3,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function AdminProductTile({
   product,
-
   setCurrentEditId,
   setOpenCreateProductsDialog,
   setFormData,
