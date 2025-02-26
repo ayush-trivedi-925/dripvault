@@ -12,7 +12,7 @@ import {
 import AddressCard from "./AddressCard";
 import { toast } from "@/hooks/use-toast";
 
-export default function Address() {
+export default function Address({ setCurrentSelectedAddress }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
@@ -112,6 +112,7 @@ export default function Address() {
                   handleAddressDelete={handleAddressDelete}
                   setCurrentEditId={setCurrentEditId}
                   setFormData={setFormData}
+                  setCurrentSelectedAddress={setCurrentSelectedAddress}
                 />
               );
             })

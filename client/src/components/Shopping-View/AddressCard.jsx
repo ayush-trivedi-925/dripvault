@@ -7,9 +7,16 @@ export default function AddressCard({
   handleAddressDelete,
   setCurrentEditId,
   setFormData,
+  setCurrentSelectedAddress,
 }) {
   return (
-    <Card>
+    <Card
+      onClick={
+        setCurrentSelectedAddress
+          ? () => setCurrentSelectedAddress(addressInfo)
+          : null
+      }
+    >
       <CardContent className="grid p-4 gap-4 ">
         <Label>Address: {addressInfo?.address}</Label>
         <Label>City: {addressInfo?.city}</Label>
