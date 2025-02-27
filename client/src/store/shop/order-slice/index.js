@@ -5,6 +5,8 @@ const initialState = {
   approvalURL: null,
   isLoading: false,
   orderId: null,
+  orderList: [],
+  orderDetails: null,
 };
 
 export const createNewOrder = createAsyncThunk(
@@ -29,10 +31,34 @@ export const capturePayment = createAsyncThunk(
   }
 );
 
+export const getAllOrdersByUser = createAsyncThunk(
+  "/order/getallordersbyuser",
+  async (userId) => {
+    const response = await axios.get(
+      `http://localhost:5000/api/shop/order/list/${userId}`
+    );
+    return response.data;
+  }
+);
+
+export const getOrderDetails = createAsyncThunk(
+  "/order/getorderdetails",
+  async (orderId) => {
+    const response = await axios.get(
+      `http://localhost:5000/api/shop/order/details/${orderId}`
+    );
+    return response.data;
+  }
+);
+
 const shopOrderSlice = createSlice({
   name: "ShoppingOrders",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderDetails: (state) => {
+      state.orderDetails = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewOrder.pending, (state) => {
@@ -52,8 +78,34 @@ const shopOrderSlice = createSlice({
         state.isLoading = false;
         state.approvalURL = null;
         state.orderId = null;
+      })
+      .addCase(getAllOrdersByUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllOrdersByUser.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.orderList = action?.payload?.data;
+      })
+      .addCase(getAllOrdersByUser.rejected, (state) => {
+        state.isLoading = false;
+        state.orderList = [];
+      })
+      .addCase(getOrderDetails.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrderDetails.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.orderDetails = action?.payload?.data;
+      })
+      .addCase(getOrderDetails.rejected, (state) => {
+        state.isLoading = false;
+        state.orderDetails = null;
       });
   },
 });
+
+export const { resetOrderDetails } = shopOrderSlice.actions;
 
 export default shopOrderSlice.reducer;

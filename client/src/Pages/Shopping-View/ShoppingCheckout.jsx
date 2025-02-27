@@ -5,6 +5,7 @@ import UserCartItemsContent from "@/components/Shopping-View/UserCartItemsConten
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { createNewOrder } from "@/store/shop/order-slice";
+import { toast } from "@/hooks/use-toast";
 
 export default function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -15,7 +16,7 @@ export default function ShoppingCheckout() {
   const dispatch = useDispatch();
 
   const totalCartAmount =
-    cartItems && cartItems.items.length > 0
+    cartItems?.items && cartItems?.items.length > 0
       ? cartItems.items.reduce(
           (sum, currentItem) =>
             sum +
@@ -28,6 +29,19 @@ export default function ShoppingCheckout() {
       : 0;
 
   function handleInitiatePaypalPayment() {
+    if (cartItems.items.length === 0) {
+      return toast({
+        title: "Your cart is empty, add an item to checkout",
+        variant: "destructive",
+      });
+    }
+
+    if (currentSelectedAddress === null) {
+      return toast({
+        title: "Select an address for shipping",
+        variant: "destructive",
+      });
+    }
     const orderData = {
       userId: user?.id,
       cartId: cartItems?._id,
@@ -68,6 +82,7 @@ export default function ShoppingCheckout() {
   if (approvalURL) {
     window.location.href = approvalURL;
   }
+  console.log(cartItems);
 
   return (
     <div className="flex flex-col">
