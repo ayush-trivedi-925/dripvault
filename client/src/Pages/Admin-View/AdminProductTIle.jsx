@@ -26,9 +26,9 @@ export default function AdminProductTile({
                 product?.salePrice > 0 ? "line-through" : ""
               } text-lg font-semibold text-primary`}
             >
-              ₹{product?.price}
+              ${product?.price}
             </span>
-            <span className="text-lg font-bold">₹{product?.salePrice}</span>
+            <span className="text-lg font-bold">${product?.salePrice}</span>
           </div>
         </CardContent>
         <CardFooter className="flex justify-between items-center">

@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { resetOrderDetails } from "@/store/shop/order-slice";
 import { Badge } from "../ui/badge";
+import { resetOrderDetailsAdmin } from "@/store/admin/order-slice";
 
 export default function ShoppingOrderDetails({ open, setOpen, orderDetails }) {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function ShoppingOrderDetails({ open, setOpen, orderDetails }) {
       open={open}
       onOpenChange={() => {
         setOpen(false);
-        dispatch(resetOrderDetails());
+        dispatch(resetOrderDetailsAdmin());
       }}
     >
       <DialogContent className="sm:max-w-[600px]">
@@ -49,7 +50,7 @@ export default function ShoppingOrderDetails({ open, setOpen, orderDetails }) {
             </div>
             <div className="flex mt-6 items-center justify-between">
               <p className="font-medium">Order Price</p>
-              <Label>₹{orderDetails?.totalAmount}</Label>
+              <Label>${orderDetails?.totalAmount}</Label>
             </div>
             <div className="flex mt-6 items-center justify-between">
               <p className="font-medium">Payment Method</p>
@@ -72,7 +73,7 @@ export default function ShoppingOrderDetails({ open, setOpen, orderDetails }) {
                         <li className="flex items-center justify-between">
                           <span>Title: {item.title}</span>
 
-                          <span>Price: ₹{item.price}</span>
+                          <span>Price: ${item.price}</span>
                         </li>
                       </ul>
                     );

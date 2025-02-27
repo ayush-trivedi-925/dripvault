@@ -20,7 +20,7 @@ export default function Login() {
   const onSubmit = (event) => {
     event.preventDefault();
     dispatch(loginUser(formData)).then((data) => {
-      if (data?.payload.success) {
+      if (data?.payload?.success) {
         console.log(data);
         toast({
           title: data?.payload.message || "Login successful!",

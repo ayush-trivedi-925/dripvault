@@ -12,6 +12,7 @@ const shopProductsRouter = require("./routes/Shop/productsRoutes.js");
 const shopCartRouter = require("./routes/Shop/cartRoutes.js");
 const shopAddressRouter = require("./routes/Shop/addressRoutes.js");
 const shopOrderRouter = require("./routes/Shop/orderRoutes.js");
+const AdminOrderRouter = require("./routes/Admin/orderRoutes.js");
 
 // Database connection
 mongoose
@@ -46,6 +47,7 @@ app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/address", shopAddressRouter);
 app.use("/api/shop/order", shopOrderRouter);
+app.use("/api/admin/order", AdminOrderRouter);
 
 app.listen(port, () => {
   console.log(`Listening on Port: ${port}`);

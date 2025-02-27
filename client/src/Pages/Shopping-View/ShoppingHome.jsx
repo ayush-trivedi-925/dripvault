@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner1.png";
-import bannertwo from "../../assets/banner2.jpg";
-import bannerThree from "../../assets/banner3.jpg";
-import bannerFour from "../../assets/banner4.jpg";
+import bannerOne from "../../assets/banner-1.webp";
+import bannertwo from "../../assets/banner-2.webp";
+import bannerThree from "../../assets/banner-3.webp";
 
 import nikeIcon from "../../assets/brand-icons/brand_nike_icon_157863.png";
 import pumaIcon from "../../assets/brand-icons/puma.png";
@@ -73,7 +72,7 @@ const brands = [
 export default function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { user } = useSelector((state) => state.auth);
-  const slides = [bannerOne, bannertwo, bannerThree, bannerFour];
+  const slides = [bannerOne, bannertwo, bannerThree];
   const dispatch = useDispatch();
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
